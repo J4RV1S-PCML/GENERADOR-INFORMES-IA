@@ -24,3 +24,8 @@ jobs:
     - name: Run script
       run: |
         python main.py
+    - name: Upload informe generado
+      uses: actions/upload-artifact@v4
+      with:
+        name: informe-generado
+        path: informe.md   # O 'informe.pdf'
