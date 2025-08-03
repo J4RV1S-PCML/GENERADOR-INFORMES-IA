@@ -1,4 +1,6 @@
 import csv
+import os
+from fpdf import FPDF
 
 # 1. Leer datos del archivo CSV
 with open('ventas.csv', 'r') as archivo:
@@ -38,3 +40,31 @@ informe = f"""
 for fila in datos:
     total_fila = float(fila['precio']) * int(fila['cantidad'])
     informe += f"| {fila['fecha']} | {fila['producto']} | {fila['cantidad']} | ${fila['precio']} | ${total_fila:.2f} |\n"
+
+# 5. Generar PDF y guardarlo en la carpeta "reportes"
+os.makedirs("reportes", exist_ok=True)
+pdf = FPDF()
+pdf.add_page()
+pdf.set_font("Arial", size=12)
+pdf.cell(0, 10, "Informe de Ventas", ln=True, align="C")
+pdf.ln(10)
+pdf.set_font("Arial", size=10)
+pdf.multi_cell(0, 8, f"Total Ventas: ${total_ventas:.2f}\nPromedio Ventas: ${promedio_ventas:.2f}\nProducto Más Vendido: {producto_mas_vendido} (Cantidad: {productos[producto_mas_vendido]})")
+pdf.ln(8)
+pdf.cell(0, 8, "Detalle de Ventas:", ln=True)
+pdf.set_font("Arial", size=9)
+pdf.cell(35, 8, "Fecha", 1)
+pdf.cell(35, 8, "Producto", 1)
+pdf.cell(20, 8, "Cantidad", 1)
+pdf.cell(35, 8, "Precio Unitario", 1)
+pdf.cell(30, 8, "Total", 1)
+pdf.ln()
+for fila in datos:
+    total_fila = float(fila['precio']) * int(fila['cantidad'])
+    pdf.cell(35, 8, fila['fecha'], 1)
+    pdf.cell(35, 8, fila['producto'], 1)
+    pdf.cell(20, 8, str(fila['cantidad']), 1)
+    pdf.cell(35, 8, f"${fila['precio']}", 1)
+    pdf.cell(30, 8, f"${total_fila:.2f}", 1)
+    pdf.ln()
+pdf.output("reportes/informe_ventas.pdf")
