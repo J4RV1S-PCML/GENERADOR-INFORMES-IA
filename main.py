@@ -41,7 +41,12 @@ for fila in datos:
     total_fila = float(fila['precio']) * int(fila['cantidad'])
     informe += f"| {fila['fecha']} | {fila['producto']} | {fila['cantidad']} | ${fila['precio']} | ${total_fila:.2f} |\n"
 
-# 5. Generar PDF y guardarlo en la carpeta "reportes"
+# Mostrar el informe en tiempo real en la consola
+print(informe)
+
+
+# 5. Generar PDF y guardarlo en la carpeta "reportes" con nombre único por fecha y secuencia
+import datetime
 os.makedirs("reportes", exist_ok=True)
 pdf = FPDF()
 pdf.add_page()
@@ -67,4 +72,15 @@ for fila in datos:
     pdf.cell(35, 8, f"${fila['precio']}", 1)
     pdf.cell(30, 8, f"${total_fila:.2f}", 1)
     pdf.ln()
-pdf.output("reportes/informe_ventas.pdf")
+
+# Generar nombre de archivo con fecha y secuencia
+fecha_actual = datetime.datetime.now().strftime('%Y-%m-%d')
+base_filename = f"informe_ventas_{fecha_actual}.pdf"
+filepath = os.path.join("reportes", base_filename)
+secuencia = 1
+while os.path.exists(filepath):
+    base_filename = f"informe_ventas_{fecha_actual}_{secuencia}.pdf"
+    filepath = os.path.join("reportes", base_filename)
+    secuencia += 1
+pdf.output(filepath)
+print(f"PDF generado: {filepath}")

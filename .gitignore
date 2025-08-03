@@ -1,0 +1,4 @@
+# Ignorar todos los archivos PDF en la carpeta reportes
+eportes/*.pdf
+# Ignorar todos los archivos PDF en cualquier parte del proyecto
+*.pdf
