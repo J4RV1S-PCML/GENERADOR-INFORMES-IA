@@ -42,3 +42,4 @@ No hay suficientes datos para comparar semanas.
 ## Notas
 - Los archivos PDF generados se ignoran en el repositorio (ver `.gitignore`).
 - El análisis de tendencias requiere al menos dos semanas de datos para comparar.
+- Test de prueba
